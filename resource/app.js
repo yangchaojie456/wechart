@@ -11,6 +11,8 @@ app.get('/', function(req, res) {
 var onlineUsers = {};
 //当前在线人数  
 var onlineCount = 0;
+// id 分配
+var userId = 1;
 
 io.on('connection', function(socket) {
     console.log('a user connected');
@@ -19,7 +21,7 @@ io.on('connection', function(socket) {
     socket.on('login', function(name) {
             // socket.id 作为用户id
             // console.log(name,socket.id)
-            
+            socket.userId = userId++;
             onlineUsers[socket.id] = name;
                 
             
@@ -27,6 +29,7 @@ io.on('connection', function(socket) {
             
             //向所有客户端广播用户加入  
             io.emit('hasLogin', { onlineUsers: onlineUsers, onlineCount: onlineCount, user: socket.id });
+            console.log(socket)
             console.log(name + '加入了聊天室');
         })
 
